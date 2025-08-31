@@ -1,37 +1,33 @@
-name: Test 
-on:
+name: test purpose
+on : 
+  pull_request:
+    branches:
+      - main 
+      - sub
+      - test
+  workflow_dispatch:
   push:
     branches:
+      - main
       - sub
+      - test
+
+    paths-ignore:
+      - workflow/.github/workflows/execution-flow.yml
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubontu-latest
+    timeout-minutes: 5
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
+      - name: cache dependencies
+        uses: actions/caches@v3
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+      - name: install dependencies
         run: npm ci
-      - name: Lint code
+      - name: lint code
         run: npm run lint
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
-      - name: Build code
-        run: npm run build
+      
