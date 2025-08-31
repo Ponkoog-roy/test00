@@ -30,4 +30,14 @@ jobs:
         run: npm ci
       - name: lint code
         run: npm run lint
+  test:
+    runs-on: ubuntu-latest  
+    timeout-minutes: 10
+    steps:
+
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: cache dependencies
+        uses: actions/caches@v3
+        with:
       
